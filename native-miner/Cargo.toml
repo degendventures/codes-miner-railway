@@ -1,0 +1,10 @@
+[package]
+name = "codes-native-miner"
+version = "1.0.0"
+edition = "2021"
+
+[dependencies]
+tiny-keccak = { version = "2.0", features = ["keccak"] }
+hex = "0.4"
+primitive-types = "0.12"
+num_cpus = "1.16"

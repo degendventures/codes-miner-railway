@@ -1,0 +1,10 @@
+.env
+.env.*
+!.env.example
+node_modules/
+native-miner/target/
+*.log
+*.bak
+*.backup
+*.before-*
+.DS_Store

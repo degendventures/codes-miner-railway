@@ -1,0 +1,15 @@
+{
+  "name": "codes-miner",
+  "version": "1.0.0",
+  "description": "$CODES native CPU miner for Ethereum Mainnet",
+  "type": "module",
+  "main": "mine-native.mjs",
+  "scripts": {
+    "mine": "node mine-native.mjs",
+    "build:cpu": "cd native-miner && cargo build --release"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "ethers": "^6.16.0"
+  }
+}
