@@ -15,7 +15,7 @@ const LOG_EVERY_MS = Number(process.env.LOG_EVERY_MS || 30000);
 const NATIVE_REFRESH_MS = Number(process.env.NATIVE_REFRESH_MS || 0);
 const NATIVE_BIN =
   process.env.NATIVE_BIN ||
-  "/root/codes-miner/native-miner/target/release/codes-native-miner";
+  "./native-miner/target/release/codes-native-miner";
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
