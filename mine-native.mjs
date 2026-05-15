@@ -3,6 +3,7 @@ import os from "node:os";
 import { spawn } from "node:child_process";
 import readline from "node:readline";
 import { ethers } from "ethers";
+import fetch from "node-fetch";
 
 const RPC = process.env.ETH_RPC;
 const PRIVATE_KEY = process.env.MINER_PRIVATE_KEY;
@@ -16,7 +17,28 @@ const NATIVE_BIN =
   process.env.NATIVE_BIN ||
   "/root/codes-miner/native-miner/target/release/codes-native-miner";
 
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+
 const PROTOCOL_FEE = ethers.parseEther("0.0005");
+
+async function sendTelegramNotification(message) {
+  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) return;
+  try {
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+    await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message,
+        parse_mode: "Markdown"
+      })
+    });
+  } catch (err) {
+    console.log("[telegram error]", err.message);
+  }
+}
 
 if (!RPC) throw new Error("Missing ETH_RPC in .env");
 if (!PRIVATE_KEY) throw new Error("Missing MINER_PRIVATE_KEY in .env");
@@ -176,6 +198,13 @@ async function runNativeRound({ wallet, codes, provider }) {
 
     console.log("[tx] confirmed in block:", receipt.blockNumber);
     console.log("[reward] 1000 $CODES minted if tx succeeded");
+    
+    await sendTelegramNotification(
+      `🚀 *Mining Success!*\n\n` +
+      `📦 *Batch:* ${batch.toString()}\n` +
+      `🔗 *TX:* [View on Etherscan](https://etherscan.io/tx/${tx.hash})\n` +
+      `💰 *Reward:* 1,000 $CODES`
+    );
   } catch (err) {
     console.log("[submit error]", err?.reason || err?.shortMessage || err?.message || err);
   }

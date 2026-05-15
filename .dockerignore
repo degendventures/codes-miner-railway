@@ -1,0 +1,4 @@
+node_modules
+native-miner/target
+.env
+.git
